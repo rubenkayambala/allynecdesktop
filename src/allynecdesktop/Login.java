@@ -1,6 +1,8 @@
 
 package allynecdesktop;
 
+import static allynecdesktop.Pageprincipale.jPanelAuto;
+import static allynecdesktop.Pageprincipale.jPanelBarreTitresAuto;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -61,12 +63,11 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jButtonValiderLogin = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(639, 403));
 
         jPanelLogin.setPreferredSize(new java.awt.Dimension(639, 403));
 
@@ -82,20 +83,25 @@ public class Login extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setText("Valider");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonValiderLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtonValiderLogin.setText("Valider");
+        jButtonValiderLogin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                jButtonValiderLoginMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonValiderLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonValiderLoginActionPerformed(evt);
             }
         });
 
@@ -129,7 +135,7 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(265, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(jButtonValiderLogin)
                 .addGap(127, 127, 127))
         );
         jPanel1Layout.setVerticalGroup(
@@ -148,7 +154,7 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(jButtonValiderLogin)
                 .addGap(60, 60, 60))
         );
 
@@ -195,17 +201,23 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonValiderLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonValiderLoginActionPerformed
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void jButtonValiderLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonValiderLoginMouseClicked
         // TODO add your handling code here:
         this.dispose();
         Pageprincipale pg = new Pageprincipale();
+         //Jpanel Auto
+        pg.jTableAuto.setSize(pg.largeurEcran, jPanelAuto.getHeight() - jPanelBarreTitresAuto.getHeight());
         pg.setVisible(true);
       
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_jButtonValiderLoginMouseClicked
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,7 +255,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonValiderLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

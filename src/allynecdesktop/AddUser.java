@@ -46,6 +46,7 @@ public class AddUser extends javax.swing.JFrame {
         
         if( cle == true){
            jButtonModifAdd.setVisible(true);
+           jButton1ValideAdd.setVisible(false);
         }else{
             jButtonModifAdd.setVisible(false);
         }
@@ -87,7 +88,7 @@ public class AddUser extends javax.swing.JFrame {
         jTextField7 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jButtonModifAdd = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButton1ValideAdd = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
@@ -238,10 +239,10 @@ public class AddUser extends javax.swing.JFrame {
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jButton1.setText("Valider");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1ValideAdd.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jButton1ValideAdd.setText("Valider");
+        jButton1ValideAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1ValideAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton2.setText("Annuler");
@@ -264,7 +265,7 @@ public class AddUser extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jButton2)
                 .addGap(27, 27, 27)
-                .addComponent(jButton1)
+                .addComponent(jButton1ValideAdd)
                 .addGap(193, 193, 193)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -282,7 +283,7 @@ public class AddUser extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanelAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
+                        .addComponent(jButton1ValideAdd)
                         .addComponent(jButton2)
                         .addComponent(jButton3))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -348,7 +349,7 @@ public class AddUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton1ValideAdd;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     public javax.swing.JButton jButtonModifAdd;

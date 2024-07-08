@@ -23,25 +23,23 @@ public class Pageprincipale extends javax.swing.JFrame {
 
  
     public Pageprincipale() {
+       
         initComponents();
-        setResizable(true);
-        //taille de l'ecran
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = screenSize.width ;
-        int height = screenSize.height ;
-        this.setSize(width,height);//taille du JFrame
+        setExtendedState(JFrame.MAXIMIZED_BOTH);//taille du JFrame
         setLocationRelativeTo(null);
+        setResizable(true);
         this.setLayout(new BorderLayout());
-        //le panel
-        jPanelMenu.setSize(width, jPanelMenu.getHeight());
-        jPanelLogin.setSize(width, height -95);
-        jPanelPrincipale.setSize(width,height);
-        jPanelEnreg.setSize(width, height -  jPanelMenu.getHeight());
-        jPanelPresence.setSize(width, height - 100);
-        jPanelAuto.setSize(width, height - 100);
-        jPanelValidation.setSize(width, height);
-        jPanelAdmin.setSize(width, height);
-      
+     
+        //taille des  gros panel
+        jPanelMenu.setSize(largeurEcran, jPanelMenu.getHeight());
+        jPanelLogin.setSize(largeurEcran, hauteurEcran -95);
+        jPanelPrincipale.setSize(largeurEcran,hauteurEcran);
+        jPanelEnreg.setSize(largeurEcran, hauteurEcran -  jPanelMenu.getHeight());
+        jPanelPresence.setSize(largeurEcran, hauteurEcran - 100);
+        jPanelAuto.setSize(largeurEcran, hauteurEcran - 100);
+        jPanelValidation.setSize(largeurEcran, hauteurEcran);
+        jPanelAdmin.setSize(largeurEcran, hauteurEcran);
+        //ajout des gros panel dans le JFrame
         this.add(jPanelMenu,BorderLayout.NORTH);
         this.add(jPanelPrincipale,BorderLayout.CENTER);
         this.add(jPanelEnreg,BorderLayout.CENTER);
@@ -51,14 +49,23 @@ public class Pageprincipale extends javax.swing.JFrame {
         this.add(jPanelValidation,BorderLayout.CENTER);
         this.add(jPanelAdmin,BorderLayout.CENTER);
         jPanelMenu.add(jLabelTitre,BorderLayout.CENTER);
+        
+        
         //JPanel Enregistrement
-        jTableEnreg.setSize(width, jPanelEnreg.getHeight()- jPanelTitlesEnreg.getHeight());
+        jTableEnreg.setSize(largeurEcran, jPanelEnreg.getHeight()- jPanelTitlesEnreg.getHeight());
         jPanelEnreg.revalidate();
         jPanelEnreg.repaint();
         //JPanel présence
-     
+        //Jpanel Auto
+        jPanelBarreTitresAuto.setSize(jPanelAuto.getWidth() + 200,100);
+        jTableAuto.setSize(largeurEcran, jPanelAuto.getHeight() - 20);
+        //Jpanel enregistrement
+        //jPanelTitlesEnreg.add(jPanel3,BorderLayout.WEST);
         
-       
+        
+        
+        
+
         
  
         ImageDesIcon();
@@ -70,10 +77,13 @@ public class Pageprincipale extends javax.swing.JFrame {
             
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
-        }
-        
-        
+        }   
     }
+    
+       //recuperer la taille de l'ecran
+     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        public int largeurEcran = screenSize.width ;
+        public int hauteurEcran = screenSize.height ;
 
      private   void ImageDesIcon()
     {
@@ -97,7 +107,7 @@ public class Pageprincipale extends javax.swing.JFrame {
         jLabelTitre.setBackground(bleuDeNuit);
         jPanelMenu.setBackground(bleuDeNuit);
         jPanelPresence.setBackground(bleuDeNuit);
-        jPanelAuto.setBackground(bleuDeNuit);
+        //jPanelAuto.setBackground(bleuDeNuit);
         jPanelValidation.setBackground(bleuDeNuit);
         jPanelAdmin.setBackground(bleuDeNuit);
       
@@ -225,7 +235,6 @@ public class Pageprincipale extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
         jComboBox3 = new javax.swing.JComboBox();
         jComboBox4 = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
@@ -234,15 +243,17 @@ public class Pageprincipale extends javax.swing.JFrame {
         jTableEnreg = new javax.swing.JTable();
         jPanelPresence = new javax.swing.JPanel();
         jPanelTitlesPresence = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
         jComboBox2 = new javax.swing.JComboBox();
+        jComboBox1 = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanelAuto = new javax.swing.JPanel();
+        jPanelBarreTitresAuto = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableAuto = new javax.swing.JTable();
         jPanelValidation = new javax.swing.JPanel();
         jPanelAdmin = new javax.swing.JPanel();
 
@@ -571,42 +582,17 @@ public class Pageprincipale extends javax.swing.JFrame {
 
         jPanelTitlesEnreg.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, -1));
 
-        jPanel3.setOpaque(false);
-
         jComboBox3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asc", "Desc" }));
+        jPanelTitlesEnreg.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1650, 20, -1, -1));
 
         jComboBox4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanelTitlesEnreg.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1560, 20, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel6.setText("Trier");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(134, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanelTitlesEnreg.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1536, 0, 370, 60));
+        jPanelTitlesEnreg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1500, 20, -1, -1));
 
         jPanelEnreg.add(jPanelTitlesEnreg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1900, 60));
 
@@ -651,14 +637,11 @@ public class Pageprincipale extends javax.swing.JFrame {
 
         jPanelTitlesPresence.setOpaque(false);
 
-        jPanel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jPanel1.setOpaque(false);
+        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asc", "Desc" }));
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nom", "PostNom", "Prenom", "Titre" }));
-
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asc", "Desc" }));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -672,47 +655,34 @@ public class Pageprincipale extends javax.swing.JFrame {
         jLabel5.setText("Date");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+        javax.swing.GroupLayout jPanelTitlesPresenceLayout = new javax.swing.GroupLayout(jPanelTitlesPresence);
+        jPanelTitlesPresence.setLayout(jPanelTitlesPresenceLayout);
+        jPanelTitlesPresenceLayout.setHorizontalGroup(
+            jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTitlesPresenceLayout.createSequentialGroup()
+                .addGap(1051, 1051, 1051)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, 0, 187, Short.MAX_VALUE)
+                .addComponent(jComboBox1, 0, 119, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73))
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanelTitlesPresenceLayout.setVerticalGroup(
+            jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanelTitlesPresenceLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
-        );
-
-        javax.swing.GroupLayout jPanelTitlesPresenceLayout = new javax.swing.GroupLayout(jPanelTitlesPresence);
-        jPanelTitlesPresence.setLayout(jPanelTitlesPresenceLayout);
-        jPanelTitlesPresenceLayout.setHorizontalGroup(
-            jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTitlesPresenceLayout.createSequentialGroup()
-                .addGap(0, 987, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanelTitlesPresenceLayout.setVerticalGroup(
-            jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -737,8 +707,10 @@ public class Pageprincipale extends javax.swing.JFrame {
         jPanelPresence.setLayout(jPanelPresenceLayout);
         jPanelPresenceLayout.setHorizontalGroup(
             jPanelPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelTitlesPresence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1825, Short.MAX_VALUE)
+            .addGroup(jPanelPresenceLayout.createSequentialGroup()
+                .addComponent(jPanelTitlesPresence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanelPresenceLayout.setVerticalGroup(
             jPanelPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -750,7 +722,40 @@ public class Pageprincipale extends javax.swing.JFrame {
 
         getContentPane().add(jPanelPresence, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1730, 830));
 
+        jPanelAuto.setBackground(new java.awt.Color(0, 204, 153));
         jPanelAuto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanelBarreTitresAuto.setBackground(new java.awt.Color(255, 51, 0));
+        jPanelBarreTitresAuto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelAuto.add(jPanelBarreTitresAuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1750, 80));
+
+        jTableAuto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "N°", "Nom", "Prenom", "Telephone", "Autorisation1", "Autorisation2", "Autorisation3", "Autorisation4", "Autorisation5"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTableAuto);
+
+        jPanelAuto.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1750, 680));
+
         getContentPane().add(jPanelAuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1730, 840));
 
         jPanelValidation.setForeground(new java.awt.Color(255, 51, 51));
@@ -900,6 +905,7 @@ public static boolean cle = false;
         // TODO add your handling code herecle
         cle = true;
         new AddUser().setVisible(true);
+        
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -972,12 +978,11 @@ public static boolean cle = false;
     private javax.swing.JLabel jLabelTitre;
     private javax.swing.JLabel jLabelValide;
     private javax.swing.JLabel jLabelWeb;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     public javax.swing.JPanel jPanelAdmin;
-    public javax.swing.JPanel jPanelAuto;
+    public static javax.swing.JPanel jPanelAuto;
+    public static javax.swing.JPanel jPanelBarreTitresAuto;
     private javax.swing.JPanel jPanelCarre;
     public javax.swing.JPanel jPanelEnreg;
     public javax.swing.JPanel jPanelLogin;
@@ -988,9 +993,11 @@ public static boolean cle = false;
     public javax.swing.JPanel jPanelTitlesEnreg;
     private javax.swing.JPanel jPanelTitlesPresence;
     public javax.swing.JPanel jPanelValidation;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
+    public javax.swing.JTable jTableAuto;
     private javax.swing.JTable jTableEnreg;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldId;
