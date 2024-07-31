@@ -7,6 +7,9 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -14,7 +17,7 @@ import javax.swing.JFrame;
 public class Bienvenu extends javax.swing.JFrame {
 
   
-    public Bienvenu() {
+    public Bienvenu() throws SQLException {
         initComponents();
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -45,6 +48,7 @@ public class Bienvenu extends javax.swing.JFrame {
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/LOGO.jpg")));
         this.setTitle("Allynec");
         
+        
         ImageDesIcon();
         
    
@@ -52,7 +56,7 @@ public class Bienvenu extends javax.swing.JFrame {
     }
     
     
-    private   void ImageDesIcon()
+    private   void ImageDesIcon() throws SQLException 
     {
         //definition de background pour jpanel et progressbar
         
@@ -162,7 +166,11 @@ public class Bienvenu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Bienvenu().setVisible(true);
+                try {
+                    new Bienvenu().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Bienvenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

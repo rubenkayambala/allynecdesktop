@@ -1,28 +1,39 @@
 package allynecdesktop;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
 
 
 public class Pageprincipale extends javax.swing.JFrame {
 
  
-    public Pageprincipale() {
+    public Pageprincipale() throws SQLException {
        
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);//taille du JFrame
@@ -62,7 +73,8 @@ public class Pageprincipale extends javax.swing.JFrame {
         //Jpanel enregistrement
         //jPanelTitlesEnreg.add(jPanel3,BorderLayout.WEST);
         
-        
+        //-----------Affichage des JTables
+        afficherEmployerInJtable();
         
         
 
@@ -209,7 +221,7 @@ public class Pageprincipale extends javax.swing.JFrame {
         jLabelTitre = new javax.swing.JLabel();
         jPanelLogin = new javax.swing.JPanel();
         jPanelQuadrantLogin = new javax.swing.JPanel();
-        jTextFieldId = new javax.swing.JTextField();
+        jTextFieldIdLogin = new javax.swing.JTextField();
         jTextFieldPw = new javax.swing.JTextField();
         jButtonLogin = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -236,7 +248,7 @@ public class Pageprincipale extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jComboBox3 = new javax.swing.JComboBox();
-        jComboBox4 = new javax.swing.JComboBox();
+        jComboBoxTrie = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -330,15 +342,15 @@ public class Pageprincipale extends javax.swing.JFrame {
         jPanelQuadrantLogin.setOpaque(false);
         jPanelQuadrantLogin.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextFieldId.setBackground(new java.awt.Color(102, 102, 102));
-        jTextFieldId.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextFieldId.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 204, 0)));
-        jTextFieldId.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldIdLogin.setBackground(new java.awt.Color(102, 102, 102));
+        jTextFieldIdLogin.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jTextFieldIdLogin.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 204, 0)));
+        jTextFieldIdLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldIdActionPerformed(evt);
+                jTextFieldIdLoginActionPerformed(evt);
             }
         });
-        jPanelQuadrantLogin.add(jTextFieldId, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 410, -1));
+        jPanelQuadrantLogin.add(jTextFieldIdLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 410, -1));
 
         jTextFieldPw.setBackground(new java.awt.Color(102, 102, 102));
         jTextFieldPw.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -523,6 +535,11 @@ public class Pageprincipale extends javax.swing.JFrame {
                 btnAddUserMouseClicked(evt);
             }
         });
+        btnAddUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddUserActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton1.setText("Modify");
@@ -586,9 +603,9 @@ public class Pageprincipale extends javax.swing.JFrame {
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asc", "Desc" }));
         jPanelTitlesEnreg.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1650, 20, -1, -1));
 
-        jComboBox4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanelTitlesEnreg.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1560, 20, -1, -1));
+        jComboBoxTrie.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jComboBoxTrie.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanelTitlesEnreg.add(jComboBoxTrie, new org.netbeans.lib.awtextra.AbsoluteConstraints(1560, 20, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel6.setText("Trier");
@@ -603,18 +620,29 @@ public class Pageprincipale extends javax.swing.JFrame {
 
             },
             new String [] {
-                "N°", "Nom", "PostNom", "Prenom", "Naissance", "Domicile", "Contact", "Email"
+                "N°", "Nom", "PostNom", "Prenom", "Sexe", "Naissance", "Domicile", "Contact", "Email", "Titre", "Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane3.setViewportView(jTableEnreg);
+        if (jTableEnreg.getColumnModel().getColumnCount() > 0) {
+            jTableEnreg.getColumnModel().getColumn(0).setMaxWidth(100);
+            jTableEnreg.getColumnModel().getColumn(4).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -690,15 +718,22 @@ public class Pageprincipale extends javax.swing.JFrame {
 
             },
             new String [] {
-                "N°", "Nom", "PostNom", "Prenom", "Titre", "Heure"
+                "N°", "Nom", "PostNom", "Prenom", "Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane2.setViewportView(jTable1);
@@ -791,14 +826,48 @@ public class Pageprincipale extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
-        // TODO add your handling code here:
-        if( jTextFieldId.getText().equals("a") && jTextFieldPw.getText().equals("b")){
-            jPanelLogin.setVisible(false);
-            jPanelPrincipale.setVisible(true);
-            barreDeTitre();
-        }else{
-            JOptionPane.showMessageDialog(null, "Mot de Passe incorrect!");
+        //connexion à la base des données
+            AllynecDB s = new AllynecDB();
+            Connection con = s.getConnection();
+            //verifie si ces infos sont contenues dans la BD
+            PreparedStatement statement;
+        try {
+            statement = con.prepareStatement("SELECT COUNT(*) FROM admin WHERE login =? and passw=?");
+            statement.setString(1,jTextFieldIdLogin.getText().toString());
+            statement.setString(2,jTextFieldPw.getText().toString());
+            ResultSet resultat = statement.executeQuery();
+
+            if(resultat.next())
+            {
+              int compteur = resultat.getInt(1);
+              if( compteur == 1)
+              {
+                statement.close();
+                resultat.close();
+                con.close();
+                jPanelLogin.setVisible(false);
+                jPanelPrincipale.setVisible(true);
+                barreDeTitre();
+                 
+              }else{
+                  JOptionPane.showMessageDialog(null, "Login ou Mot de Passe incorrect!");
+              }
+            }else{
+                JOptionPane.showMessageDialog(null, "Une erreur s'est produite!");
+            } 
+        }catch (SQLException ex) {
+            Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Une erreur s'est produite!");
         }
+            
+              
+//        if( jTextFieldIdLogin.getText().equals("a") && jTextFieldPw.getText().equals("b")){
+//            jPanelLogin.setVisible(false);
+//            jPanelPrincipale.setVisible(true);
+//            barreDeTitre();
+//        }else{
+//            JOptionPane.showMessageDialog(null, "Mot de Passe incorrect!");
+//        }
     }//GEN-LAST:event_jButtonLoginActionPerformed
 
     private void jLabelRetourMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRetourMenuMouseClicked
@@ -824,9 +893,9 @@ public class Pageprincipale extends javax.swing.JFrame {
         barreDeTitre();
     }//GEN-LAST:event_jLabelRetourMenuMouseClicked
 
-    private void jTextFieldIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIdActionPerformed
+    private void jTextFieldIdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIdLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldIdActionPerformed
+    }//GEN-LAST:event_jTextFieldIdLoginActionPerformed
 
     private void jLabelEnregMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelEnregMouseClicked
         // TODO add your handling code here:
@@ -887,6 +956,18 @@ public void ouvrirLien(){
             }
 });
 }
+
+public static boolean  isJFrameOpen(String title){
+    for(Window window :Window.getWindows()){
+        if(window instanceof JFrame){
+            JFrame frame = (JFrame) window;
+            if(frame.getTitle().equals(title) && frame.isVisible()){
+                return true;
+            }
+        }
+    }
+    return false;
+}
     
     private void jLabelWebMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelWebMouseClicked
                 // ecouteur pour lr label WEB
@@ -894,15 +975,29 @@ public void ouvrirLien(){
        
     }//GEN-LAST:event_jLabelWebMouseClicked
 public static boolean cle = false;
+boolean pageOuverte = false;
     private void btnAddUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddUserMouseClicked
         // TODO add your handling code here:
-        //page Add
         cle = false;
-        new AddUser().setVisible(true);
+        if( pageOuverte == false){
+            //page Add
+        
+            new AddUser().setVisible(true);
+            pageOuverte = true;
+       
+        }
+        else{
+            new AddUser().setVisible(false);
+            pageOuverte = false;
+            
+        }
+
+        
     }//GEN-LAST:event_btnAddUserMouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code herecle
+        
         cle = true;
         new AddUser().setVisible(true);
         
@@ -911,6 +1006,10 @@ public static boolean cle = false;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddUserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -942,13 +1041,17 @@ public static boolean cle = false;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Pageprincipale().setVisible(true);
+                try {
+                    new Pageprincipale().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddUser;
+    public javax.swing.JButton btnAddUser;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -957,7 +1060,7 @@ public static boolean cle = false;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
+    private javax.swing.JComboBox jComboBoxTrie;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -998,10 +1101,80 @@ public static boolean cle = false;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     public javax.swing.JTable jTableAuto;
-    private javax.swing.JTable jTableEnreg;
+    public javax.swing.JTable jTableEnreg;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextFieldId;
+    private javax.swing.JTextField jTextFieldIdLogin;
     private javax.swing.JTextField jTextFieldMenu;
     private javax.swing.JTextField jTextFieldPw;
     // End of variables declaration//GEN-END:variables
+    
+    //------------------------------------page enrg-----------------------------------------------------------------------------
+       /// importations des des employés de la BD vers le JFrame Enrg
+    
+    
+
+//    //importation des  employés de la bd vers le Jtale
+     public ArrayList<Class_Enrg> getEmployeList() throws SQLException
+     {
+         
+          AllynecDB s = new AllynecDB();
+          Connection con = s.getConnection();
+         
+         ArrayList<Class_Enrg> ListeEmploye = new ArrayList<Class_Enrg>();
+         String query1 = "SELECT  nom,postnom,prenom,sexe,datenaissance,domicile,contact,email, titre ,dateAjout,iduser,situation,motif FROM users ";
+         //String query2 = "SELECT  t1.IDproduit,t1.Categorie,t1.Forme,t1.Nom,t1.Format,t1.PrixUnitaire,t1.Quantite,t1.PrixTotal, t2.Firme  FROM produits t1 INNER JOIN fabriquants t2 ON t1.IDfirme = t2.IDfirme group by  ";
+         //String query;
+         
+         
+         
+         Statement st;
+         ResultSet rs;
+         
+         try {
+              st = con.createStatement();
+              rs = st.executeQuery(query1);
+              Class_Enrg listeEnrg ;
+              int j = 1;
+              while(rs.next())
+              {
+                   
+                  listeEnrg = new Class_Enrg(j,rs.getString("nom"),rs.getString("postnom"),rs.getString("prenom"),rs.getString("sexe"),rs.getDate("datenaissance"),rs.getString("domicile"),rs.getString("contact"),rs.getString("email"),rs.getString("titre"),rs.getDate("dateAjout"),rs.getInt("iduser"),rs.getString("situation"),rs.getString("motif"));
+                  ListeEmploye.add(listeEnrg);
+                  j++;
+              }
+              st.close();
+              rs.close();
+             con.close();
+         } catch (Exception ex) {
+             Logger.getLogger(Class_Enrg.class.getName()).log(Level.SEVERE,null,ex);
+         }
+         
+        return ListeEmploye;
+         
+     }
+    
+     public void afficherEmployerInJtable() throws SQLException
+     {
+          ArrayList<Class_Enrg> list2 = getEmployeList();
+          DefaultTableModel model = (DefaultTableModel)jTableEnreg.getModel();
+          Object[] row = new Object[11];                                
+          for( int i = 0 ; i < list2.size(); i++)
+          {
+             row[0] = list2.get(i).getNumEmploy();
+             row[1] = list2.get(i).getNom();
+             row[2] = list2.get(i).getPstnom();
+             row[3] = list2.get(i).getPnom();
+             row[4] = list2.get(i).getSexe();
+             row[5] = list2.get(i).getNaissance();
+             row[6] = list2.get(i).getDomicile();
+             row[7] = list2.get(i).getContact();
+             row[8] = list2.get(i).getEmail();
+             row[9] = list2.get(i).getTitre();
+             row[10] = list2.get(i).getDateAjout();
+             
+            
+              model.addRow(row);
+          }
+        
+     }
 }

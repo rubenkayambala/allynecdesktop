@@ -5,11 +5,26 @@
  */
 package allynecdesktop;
 
+import static allynecdesktop.Methodes.isValidDate;
+import static allynecdesktop.Methodes.isValidEmail;
 import static allynecdesktop.Pageprincipale.cle;
 import java.awt.Color;
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -58,7 +73,7 @@ public class AddUser extends javax.swing.JFrame {
        
     }
 
-   
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,15 +94,17 @@ public class AddUser extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        jTextFieldNom = new javax.swing.JTextField();
+        jTextFieldPnom = new javax.swing.JTextField();
+        jTextFieldPrenom = new javax.swing.JTextField();
+        jTextFieldNaiss = new javax.swing.JTextField();
+        jTextFieldDomicile = new javax.swing.JTextField();
+        jTextFieldContact = new javax.swing.JTextField();
+        jTextFieldEmail = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jButtonModifAdd = new javax.swing.JButton();
+        jComboBoxSexe = new javax.swing.JComboBox();
+        jLabel10 = new javax.swing.JLabel();
         jButton1ValideAdd = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -135,27 +152,29 @@ public class AddUser extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel9.setText("Email:");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldNom.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldPnom.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldPnom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                jTextFieldPnomActionPerformed(evt);
             }
         });
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldPrenom.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldNaiss.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldDomicile.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldContact.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldEmail.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jButtonModifAdd.setFont(new java.awt.Font("Baskerville Old Face", 0, 24)); // NOI18N
         jButtonModifAdd.setText("Modifier");
+
+        jComboBoxSexe.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "M", "F" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -165,14 +184,22 @@ public class AddUser extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jButtonModifAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jComboBoxSexe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBoxSexe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(jButtonModifAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(29, Short.MAX_VALUE))
         );
+
+        jLabel10.setText("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -189,13 +216,16 @@ public class AddUser extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1))
+                    .addComponent(jTextFieldPnom, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                    .addComponent(jTextFieldPrenom, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldDomicile, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldContact, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldNom)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jTextFieldNaiss, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -213,46 +243,65 @@ public class AddUser extends javax.swing.JFrame {
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                     .addComponent(jLabel3)
-                                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(jTextFieldNom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel4))
-                                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jTextFieldPnom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel6))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldPrenom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextFieldNaiss, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(5, 5, 5)))))
                                 .addGap(12, 12, 12)
                                 .addComponent(jLabel7))
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldDomicile, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8))
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldContact, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
-        jButton1ValideAdd.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jButton1ValideAdd.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton1ValideAdd.setText("Valider");
         jButton1ValideAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1ValideAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1ValideAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ValideAddActionPerformed(evt);
+            }
+        });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton2.setText("Annuler");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton3.setText("Vider");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelAddLayout = new javax.swing.GroupLayout(jPanelAdd);
         jPanelAdd.setLayout(jPanelAddLayout);
@@ -309,9 +358,137 @@ public class AddUser extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void jTextFieldPnomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPnomActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_jTextFieldPnomActionPerformed
+int compteur = 0;
+//methode pour verichier du jframe AddUser
+    public boolean verifierChampUser()  
+        {
+             int compteur = 0;
+            boolean test = true;
+            if( jTextFieldNom.getText().trim().isEmpty()
+                || jTextFieldPnom.getText().trim().isEmpty()
+                || jTextFieldPrenom.getText().trim().isEmpty()
+                || jTextFieldNaiss.getText().isEmpty()
+                || jTextFieldDomicile.getText().isEmpty()
+                || jTextFieldContact.getText().trim().isEmpty()
+                || jTextFieldEmail.getText().trim().isEmpty()
+                )
+       { JOptionPane.showMessageDialog(null, " Aucun champ ne peut être vide ! ");test = false;}
+       else if(jTextFieldNom.getText().trim().length() > 20
+                || jTextFieldPnom.getText().trim().length() > 20
+                || jTextFieldPrenom.getText().trim().length() > 20
+                || jTextFieldDomicile.getText().trim().length() > 100
+                || jTextFieldContact.getText().trim().length() > 10
+                || jTextFieldEmail.getText().trim().length() > 100){JOptionPane.showMessageDialog(null,"Veuillez respecter le nombre des caractères pour tous les champs.");test = false;}
+       else if( Methodes.chiffreUniquement(jTextFieldContact.getText()) == false){ JOptionPane.showMessageDialog(null,"Entrez un numéro de téléphone valide !\nexemple: 0891833436");test = false;}
+        else if(isValidEmail(jTextFieldEmail.getText().trim().toString())== false){
+             JOptionPane.showMessageDialog(null, "l'Adresse email n'est pas valide");
+             test = false;
+         }
+        else if(isValidDate(jTextFieldNaiss.getText().toString()) == false){
+            JOptionPane.showMessageDialog(null, "Le format de Date n'est pas correct!");
+            test = false;
+        }
+       else if(jTextFieldContact.getText().length() > 10){JOptionPane.showMessageDialog(null,"le champ \"contact\" ne peut pas contenir plus de 13 chiffres.");test = false;}
+       else if( compteur > 0){ JOptionPane.showMessageDialog(null,"Le contact que vous avez "
+               + "entré existe déjà!\nVeuillez entrer un contact valide.");test = false;}
+       else{ test = true;}
+        return test;
+        }
+    
+    private void jButton1ValideAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ValideAddActionPerformed
+           
+//verifie si ce email existe déjà dans la BD
+            boolean emailExiste = false;
+           
+        try {
+            AllynecDB s = new AllynecDB();
+            Connection con=s.getConnection();
+            PreparedStatement contactExiste = con.prepareStatement("SELECT COUNT(*) FROM users WHERE email =? ");
+            
+            contactExiste.setString(1,jTextFieldEmail.getText().trim());
+            ResultSet resultat = contactExiste.executeQuery();
+            if(resultat.next())
+            {
+               
+                int nombreOccurrences = resultat.getInt(1);
+               emailExiste = (nombreOccurrences > 0); // Mettez à jour la variable
+            }
+            contactExiste.close();
+            contactExiste.close();
+            con.close();
+        }catch (SQLException ex) {
+            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+       
+        
+        LocalDate date = LocalDate.now();
+       
+
+         if( verifierChampUser() == false){
+             JOptionPane.showMessageDialog(null, "Respectez tous les champs");
+         }
+        
+         else  if(emailExiste == true){
+            JOptionPane.showMessageDialog(null, "Cette adresse mail existe déjà");
+        }
+         else{
+
+            try {
+                AllynecDB s = new AllynecDB();
+                Connection con=s.getConnection();
+                
+               java.sql.Date dateNaiss = java.sql.Date.valueOf(jTextFieldNaiss.getText().toString());
+       
+                //insertion des données
+                PreparedStatement ins = con.prepareStatement("insert into users(nom,postnom,prenom,Sexe,datenaissance,domicile,contact,email,situation,dateajout)values(?,?,?,?,?,?,?,?,?,?)");
+                
+                ins.setString(1,jTextFieldNom.getText().toUpperCase());//nom
+                ins.setString(2,jTextFieldPnom.getText().toUpperCase());//Postnom
+                ins.setString(3,jTextFieldPrenom.getText().toUpperCase());//Prenom
+                ins.setString(4,(String) jComboBoxSexe.getSelectedItem());//sexe
+                ins.setDate(5,dateNaiss);//contact
+                ins.setString(6,jTextFieldDomicile.getText());//adresse
+                ins.setString(7,jTextFieldContact.getText());//mot de passe
+                ins.setString(8, jTextFieldEmail.getText());//question
+                ins.setString(9,"Activé");//date debut
+                ins.setDate(10,java.sql.Date.valueOf(date));//date debut);
+                ins.executeUpdate();
+               
+                ins.close();
+                con.close();
+                 Pageprincipale pg = new Pageprincipale();
+                 pg.afficherEmployerInJtable();
+                 DefaultTableModel model = (DefaultTableModel) pg.jTableEnreg.getModel();
+                 model.setRowCount(0);
+                pg.afficherEmployerInJtable();
+                JOptionPane.showMessageDialog(null, "Opération réusiie"); 
+                //Vider les champs
+                jTextFieldNom.setText("");
+                jTextFieldPnom.setText("");
+                jTextFieldPrenom.setText("");
+                jTextFieldNaiss.setText("");
+                jTextFieldDomicile.setText("");
+                jTextFieldContact.setText("");
+                jTextFieldEmail.setText("");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Echec d'enregistrement! ");
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+            
+         }            
+    }//GEN-LAST:event_jButton1ValideAddActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -347,13 +524,18 @@ public class AddUser extends javax.swing.JFrame {
             }
         });
     }
+    
+   
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1ValideAdd;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     public javax.swing.JButton jButtonModifAdd;
+    private javax.swing.JComboBox jComboBoxSexe;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -365,12 +547,12 @@ public class AddUser extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelAdd;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextFieldContact;
+    private javax.swing.JTextField jTextFieldDomicile;
+    private javax.swing.JTextField jTextFieldEmail;
+    private javax.swing.JTextField jTextFieldNaiss;
+    public javax.swing.JTextField jTextFieldNom;
+    private javax.swing.JTextField jTextFieldPnom;
+    private javax.swing.JTextField jTextFieldPrenom;
     // End of variables declaration//GEN-END:variables
 }

@@ -2,13 +2,15 @@
 package allynecdesktop;
 import allynecdesktop.Pageprincipale;
 import java.awt.BorderLayout;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class AllynecDesktop {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         // TODO code application logic here
         Bienvenu bn = new Bienvenu();
         bn.setVisible(true);
@@ -33,7 +35,10 @@ public class AllynecDesktop {
               pg.jPanelPresence.setVisible(false);
               pg.jPanelValidation.setVisible(false);
               pg.jPanelAdmin.setVisible(false);
-              
+              //connexion à la base des données
+              AllynecDB s = new AllynecDB();
+              Connection con = s.getConnection();
+              //ouverture de l'espace travail
               pg.setVisible(true);
               pg.jPanelLogin.setVisible(true);
               pg.ouvrirLien();

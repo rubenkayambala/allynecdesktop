@@ -6,6 +6,10 @@ import static allynecdesktop.Pageprincipale.jPanelBarreTitresAuto;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -25,7 +29,10 @@ public class Login extends javax.swing.JFrame {
         this.setTitle("Allynec");
         
         
+         
     }
+    
+   
     
     
     
@@ -208,7 +215,12 @@ public class Login extends javax.swing.JFrame {
     private void jButtonValiderLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonValiderLoginMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        Pageprincipale pg = new Pageprincipale();
+        Pageprincipale pg = null;
+        try {
+            pg = new Pageprincipale();
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
          //Jpanel Auto
         pg.jTableAuto.setSize(pg.largeurEcran, jPanelAuto.getHeight() - jPanelBarreTitresAuto.getHeight());
         pg.setVisible(true);
