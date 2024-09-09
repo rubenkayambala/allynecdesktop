@@ -9,10 +9,15 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.scene.text.Text;
 import javax.swing.JOptionPane;
 
 /**
@@ -67,6 +72,13 @@ public class Methodes {
         }
     }
     
+    
+    public static int compteurChamp( String a) {
+        String b = a;
+        
+        return b.length();
+        
+    }
     //verifier si un champ contient uniquement les réels(entier)
     public static boolean reelUniquement( String a)
     {
@@ -112,6 +124,22 @@ public class Methodes {
             return false;
         }
         
+    }
+    
+ 
+
+   public static Date dateActuelle() {
+       Date date = Date.valueOf(LocalDate.now());
+        return date;
+    }
+
+  
+    
+    
+    public static Time heureActuelle() {
+        LocalTime currentTime = LocalTime.now();
+        Time heure = Time.valueOf(currentTime);
+        return heure;
     }
 
 }

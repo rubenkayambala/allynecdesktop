@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package allynecdesktop;
 
 import static allynecdesktop.Methodes.isValidDate;
@@ -11,20 +7,14 @@ import static allynecdesktop.Pageprincipale.cle;
 import java.awt.Color;
 import java.awt.Image;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -35,10 +25,15 @@ public class AddUser extends javax.swing.JFrame {
     /**
      * Creates new form AddUser
      */
-    public AddUser() {
+    public AddUser() throws SQLException {
         initComponents();
         //fermeture barre des titres jframe
     designe();
+    Pageprincipale pg = new Pageprincipale();
+    pg.afficherEmployerInJtable();
+    
+    
+   
         
     }
     
@@ -105,8 +100,8 @@ public class AddUser extends javax.swing.JFrame {
         jButtonModifAdd = new javax.swing.JButton();
         jComboBoxSexe = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jButton1ValideAdd = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -201,6 +196,8 @@ public class AddUser extends javax.swing.JFrame {
 
         jLabel10.setText("yyyy-MM-dd");
 
+        jLabel11.setText("(Facultatif)");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -226,8 +223,13 @@ public class AddUser extends javax.swing.JFrame {
                         .addComponent(jTextFieldNaiss, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel11))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,7 +271,9 @@ public class AddUser extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9)
-                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -277,16 +281,16 @@ public class AddUser extends javax.swing.JFrame {
         jButton1ValideAdd.setText("Valider");
         jButton1ValideAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1ValideAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1ValideAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1ValideAddMouseClicked(evt);
+            }
+        });
         jButton1ValideAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ValideAddActionPerformed(evt);
             }
         });
-
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton2.setText("Annuler");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton3.setText("Vider");
@@ -311,11 +315,9 @@ public class AddUser extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAddLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addGap(28, 28, 28)
-                .addComponent(jButton2)
-                .addGap(27, 27, 27)
+                .addGap(67, 67, 67)
                 .addComponent(jButton1ValideAdd)
-                .addGap(193, 193, 193)
+                .addGap(250, 250, 250)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanelAddLayout.createSequentialGroup()
@@ -333,7 +335,6 @@ public class AddUser extends javax.swing.JFrame {
                 .addGroup(jPanelAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanelAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1ValideAdd)
-                        .addComponent(jButton2)
                         .addComponent(jButton3))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
@@ -373,20 +374,15 @@ int compteur = 0;
                 || jTextFieldNaiss.getText().isEmpty()
                 || jTextFieldDomicile.getText().isEmpty()
                 || jTextFieldContact.getText().trim().isEmpty()
-                || jTextFieldEmail.getText().trim().isEmpty()
                 )
        { JOptionPane.showMessageDialog(null, " Aucun champ ne peut être vide ! ");test = false;}
        else if(jTextFieldNom.getText().trim().length() > 20
                 || jTextFieldPnom.getText().trim().length() > 20
                 || jTextFieldPrenom.getText().trim().length() > 20
                 || jTextFieldDomicile.getText().trim().length() > 100
-                || jTextFieldContact.getText().trim().length() > 10
-                || jTextFieldEmail.getText().trim().length() > 100){JOptionPane.showMessageDialog(null,"Veuillez respecter le nombre des caractères pour tous les champs.");test = false;}
+                || jTextFieldContact.getText().trim().length() > 10)
+       {JOptionPane.showMessageDialog(null,"Veuillez respecter le nombre des caractères pour tous les champs.");test = false;}
        else if( Methodes.chiffreUniquement(jTextFieldContact.getText()) == false){ JOptionPane.showMessageDialog(null,"Entrez un numéro de téléphone valide !\nexemple: 0891833436");test = false;}
-        else if(isValidEmail(jTextFieldEmail.getText().trim().toString())== false){
-             JOptionPane.showMessageDialog(null, "l'Adresse email n'est pas valide");
-             test = false;
-         }
         else if(isValidDate(jTextFieldNaiss.getText().toString()) == false){
             JOptionPane.showMessageDialog(null, "Le format de Date n'est pas correct!");
             test = false;
@@ -399,9 +395,17 @@ int compteur = 0;
         }
     
     private void jButton1ValideAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ValideAddActionPerformed
-           
-//verifie si ce email existe déjà dans la BD
-            boolean emailExiste = false;
+        boolean test , emailExiste = false;  
+         long importID = 0 ;
+        if(! (jTextFieldEmail.getText().trim().isEmpty())){ 
+            if(  isValidEmail(jTextFieldEmail.getText()) == false)
+            {
+             JOptionPane.showMessageDialog(null, "l'Adresse email n'est pas valide");
+             test = false;
+         }else{
+                
+                //verifie si ce email existe déjà dans la BD
+             emailExiste = false;
            
         try {
             AllynecDB s = new AllynecDB();
@@ -422,8 +426,10 @@ int compteur = 0;
         }catch (SQLException ex) {
             Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-       
+                 }
+        }
+
+     
         
         LocalDate date = LocalDate.now();
        
@@ -461,11 +467,70 @@ int compteur = 0;
                 ins.close();
                 con.close();
                  Pageprincipale pg = new Pageprincipale();
-                 pg.afficherEmployerInJtable();
-                 DefaultTableModel model = (DefaultTableModel) pg.jTableEnreg.getModel();
-                 model.setRowCount(0);
-                pg.afficherEmployerInJtable();
+                 
+                
                 JOptionPane.showMessageDialog(null, "Opération réusiie"); 
+                
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Echec d'enregistrement! ");
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+            
+             try {
+             
+                 AllynecDB s = new AllynecDB();
+                Connection con=s.getConnection();
+     
+               PreparedStatement pstmt  =con.prepareStatement("SELECT iduser FROM users WHERE 	contact = ?");
+               pstmt.setString(1, jTextFieldContact.getText());
+               
+                // Exécutez la requête
+            ResultSet resultSet = pstmt.executeQuery();
+            
+            // Traitez les résultats
+            if (resultSet.next()) {
+             
+                 importID = resultSet.getInt("iduser");
+                
+                // Affichez les données récupérées
+//               JOptionPane.showMessageDialog(null, "REssuie : "+importID);
+            }
+            
+       
+            pstmt.close();
+            resultSet.close();
+                     
+              
+            //insertion des données
+          
+        try {
+            
+            // Créez la requête SQL
+            String sql = "INSERT INTO autorisation (userautorise, lecture, ecriture) VALUES (?, ?, ?)";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+            // Remplacez les "?" par les valeurs correspondantes
+            preparedStatement.setLong(1, importID); // userautorise
+            preparedStatement.setInt(2, 0);  // lecture
+            preparedStatement.setInt(3, 0);  // ecriture
+
+            // Exécutez la requête
+            int rowsInserted = preparedStatement.executeUpdate();
+            if (rowsInserted > 0) {
+//                System.out.println("Une nouvelle ligne a été insérée dans autorisation avec succès !");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Affiche l'erreur SQL
+        } finally {
+            try {
+                if (con != null) {
+                    con.close(); // Fermez la connexion pour éviter les fuites de ressources
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+       
                 //Vider les champs
                 jTextFieldNom.setText("");
                 jTextFieldPnom.setText("");
@@ -474,21 +539,33 @@ int compteur = 0;
                 jTextFieldDomicile.setText("");
                 jTextFieldContact.setText("");
                 jTextFieldEmail.setText("");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Echec d'enregistrement! ");
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-            }
+        } catch (Exception e) {
+        }
             
-         }            
+         }        
+         
+         
+        
     }//GEN-LAST:event_jButton1ValideAddActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        // Vider les champs
+        jTextFieldNom.setText("");
+                jTextFieldPnom.setText("");
+                jTextFieldPrenom.setText("");
+                jTextFieldNaiss.setText("");
+                jTextFieldDomicile.setText("");
+                jTextFieldContact.setText("");
+                jTextFieldEmail.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton1ValideAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1ValideAddMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ValideAddMouseClicked
 
     /**
      * @param args the command line arguments
@@ -520,7 +597,11 @@ int compteur = 0;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddUser().setVisible(true);
+                try {
+                    new AddUser().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -530,12 +611,12 @@ int compteur = 0;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1ValideAdd;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     public javax.swing.JButton jButtonModifAdd;
     private javax.swing.JComboBox jComboBoxSexe;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

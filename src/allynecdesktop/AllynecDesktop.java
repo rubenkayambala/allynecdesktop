@@ -4,6 +4,7 @@ import allynecdesktop.Pageprincipale;
 import java.awt.BorderLayout;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class AllynecDesktop {
 
@@ -35,11 +36,21 @@ public class AllynecDesktop {
               pg.jPanelPresence.setVisible(false);
               pg.jPanelValidation.setVisible(false);
               pg.jPanelAdmin.setVisible(false);
+              //page autorisation
+              pg.jCheckBoxLecture.setVisible(false);
+              pg.jCheckBoxEcriture.setVisible(false);
+              pg.modifierAuto.setVisible(false);
+              //page Enrg
+              pg.btn_modif_enrg.setVisible(false);
+              pg.bnt_supp_enrg.setVisible(false);
+              pg.btn_desa_enrg.setVisible(false);
               //connexion à la base des données
               AllynecDB s = new AllynecDB();
               Connection con = s.getConnection();
               //ouverture de l'espace travail
               pg.setVisible(true);
+              JOptionPane.showMessageDialog(null, "Veuillez mettre à jour la date et l'heure de votre Ordinateur pour que \n"
+                      + "certaines fonctionalités soient exécutées");
               pg.jPanelLogin.setVisible(true);
               pg.ouvrirLien();
               

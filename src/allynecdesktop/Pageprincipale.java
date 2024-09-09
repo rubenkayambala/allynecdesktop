@@ -1,6 +1,5 @@
 package allynecdesktop;
 
-import com.sun.java.swing.plaf.windows.resources.windows;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -8,30 +7,41 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 
 public class Pageprincipale extends javax.swing.JFrame {
-
+    //recuperer la taille de l'ecran
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int largeurEcran = screenSize.width ;
+        int hauteurEcran = screenSize.height ;
  
     public Pageprincipale() throws SQLException {
        
@@ -40,6 +50,9 @@ public class Pageprincipale extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(true);
         this.setLayout(new BorderLayout());
+        
+          
+     
      
         //taille des  gros panel
         jPanelMenu.setSize(largeurEcran, jPanelMenu.getHeight());
@@ -60,6 +73,7 @@ public class Pageprincipale extends javax.swing.JFrame {
         this.add(jPanelValidation,BorderLayout.CENTER);
         this.add(jPanelAdmin,BorderLayout.CENTER);
         jPanelMenu.add(jLabelTitre,BorderLayout.CENTER);
+       
         
         
         //JPanel Enregistrement
@@ -75,9 +89,10 @@ public class Pageprincipale extends javax.swing.JFrame {
         
         //-----------Affichage des JTables
         afficherEmployerInJtable();
+        afficherPresenceInJtable();
+        afficherAutoriInJtable();
+        //AfficheItemSelectionne();
         
-        
-
         
  
         ImageDesIcon();
@@ -90,12 +105,40 @@ public class Pageprincipale extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }   
+        
+         //ecouteur button actualiser / page enreg
+    jButtonActualiser.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    DefaultTableModel model = (DefaultTableModel) jTableEnreg.getModel();
+                    model.setRowCount(0);
+                    afficherEmployerInJtable();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+                      //ecouteur button actualiser / page presen
+    jButtonActualPres.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    DefaultTableModel model = (DefaultTableModel) jTablePresence.getModel();
+                    model.setRowCount(0);
+                    afficherPresenceInJtable();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
     }
+   
     
-       //recuperer la taille de l'ecran
-     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        public int largeurEcran = screenSize.width ;
-        public int hauteurEcran = screenSize.height ;
+     
 
      private   void ImageDesIcon()
     {
@@ -119,7 +162,8 @@ public class Pageprincipale extends javax.swing.JFrame {
         jLabelTitre.setBackground(bleuDeNuit);
         jPanelMenu.setBackground(bleuDeNuit);
         jPanelPresence.setBackground(bleuDeNuit);
-        //jPanelAuto.setBackground(bleuDeNuit);
+        jPanelAuto.setBackground(bleuDeNuit);
+        jPanelBarreTitresAuto.setBackground(bleuDeNuit);
         jPanelValidation.setBackground(bleuDeNuit);
         jPanelAdmin.setBackground(bleuDeNuit);
       
@@ -243,27 +287,30 @@ public class Pageprincipale extends javax.swing.JFrame {
         jPanelTitlesEnreg = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnAddUser = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox();
-        jComboBoxTrie = new javax.swing.JComboBox();
-        jLabel6 = new javax.swing.JLabel();
+        btn_modif_enrg = new javax.swing.JButton();
+        bnt_supp_enrg = new javax.swing.JButton();
+        btn_desa_enrg = new javax.swing.JButton();
+        jButtonActualiser = new javax.swing.JButton();
+        jTextFieldEnrg = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableEnreg = new javax.swing.JTable();
         jPanelPresence = new javax.swing.JPanel();
         jPanelTitlesPresence = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldPres = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        jButtonActualPres = new javax.swing.JButton();
+        jTextFieldAjout_presence = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePresence = new javax.swing.JTable();
         jPanelAuto = new javax.swing.JPanel();
         jPanelBarreTitresAuto = new javax.swing.JPanel();
+        jCheckBoxLecture = new javax.swing.JCheckBox();
+        jCheckBoxEcriture = new javax.swing.JCheckBox();
+        modifierAuto = new javax.swing.JButton();
+        jButtonActual = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableAuto = new javax.swing.JTable();
         jPanelValidation = new javax.swing.JPanel();
@@ -541,31 +588,35 @@ public class Pageprincipale extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Modify");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_modif_enrg.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btn_modif_enrg.setText("Modify");
+        btn_modif_enrg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_modif_enrg.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                btn_modif_enrgMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_modif_enrg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_modif_enrgActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setText("Delete");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bnt_supp_enrg.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        bnt_supp_enrg.setText("Delete");
+        bnt_supp_enrg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton4.setText("Desactivate");
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_desa_enrg.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btn_desa_enrg.setText("Desactivate");
+        btn_desa_enrg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton3.setText("Back");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonActualiser.setFont(new java.awt.Font("Ebrima", 3, 16)); // NOI18N
+        jButtonActualiser.setText("Actualiser");
+        jButtonActualiser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualiserActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -575,41 +626,43 @@ public class Pageprincipale extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(btnAddUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btn_modif_enrg)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(bnt_supp_enrg)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addComponent(btn_desa_enrg)
+                .addGap(87, 87, 87)
+                .addComponent(jButtonActualiser)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btn_modif_enrg)
                     .addComponent(btnAddUser)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3))
+                    .addComponent(bnt_supp_enrg)
+                    .addComponent(btn_desa_enrg))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonActualiser)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelTitlesEnreg.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, -1));
 
-        jComboBox3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asc", "Desc" }));
-        jPanelTitlesEnreg.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1650, 20, -1, -1));
+        jTextFieldEnrg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldEnrgKeyReleased(evt);
+            }
+        });
+        jPanelTitlesEnreg.add(jTextFieldEnrg, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 16, 200, 30));
 
-        jComboBoxTrie.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBoxTrie.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanelTitlesEnreg.add(jComboBoxTrie, new org.netbeans.lib.awtextra.AbsoluteConstraints(1560, 20, -1, -1));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel6.setText("Trier");
-        jPanelTitlesEnreg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1500, 20, -1, -1));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Recherche");
+        jPanelTitlesEnreg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, 100, 20));
 
         jPanelEnreg.add(jPanelTitlesEnreg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1900, 60));
 
@@ -665,67 +718,71 @@ public class Pageprincipale extends javax.swing.JFrame {
 
         jPanelTitlesPresence.setOpaque(false);
 
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Asc", "Desc" }));
+        jTextFieldPres.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextFieldPres.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldPresKeyReleased(evt);
+            }
+        });
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nom", "PostNom", "Prenom", "Titre" }));
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Trrier par:");
-
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Date");
+        jLabel5.setText("Recherche");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jButtonActualPres.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
+        jButtonActualPres.setText("Actualiser");
+
+        jButton1.setText("Ajout Présence");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelTitlesPresenceLayout = new javax.swing.GroupLayout(jPanelTitlesPresence);
         jPanelTitlesPresence.setLayout(jPanelTitlesPresenceLayout);
         jPanelTitlesPresenceLayout.setHorizontalGroup(
             jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelTitlesPresenceLayout.createSequentialGroup()
-                .addGap(1051, 1051, 1051)
+                .addGap(639, 639, 639)
+                .addComponent(jButtonActualPres)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldAjout_presence, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, 0, 119, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jTextFieldPres, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(339, Short.MAX_VALUE))
         );
         jPanelTitlesPresenceLayout.setVerticalGroup(
             jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanelTitlesPresenceLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGap(10, 10, 10)
+                .addGroup(jPanelTitlesPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextFieldAjout_presence, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldPres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonActualPres, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1, 1, 1))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePresence.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "N°", "Nom", "PostNom", "Prenom", "Date"
+                "Nom", "Prenom", "Sexe", "Titre", "Contact", "Date", "Huerre"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -736,13 +793,19 @@ public class Pageprincipale extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTablePresence);
+        if (jTablePresence.getColumnModel().getColumnCount() > 0) {
+            jTablePresence.getColumnModel().getColumn(2).setMaxWidth(70);
+            jTablePresence.getColumnModel().getColumn(4).setMaxWidth(200);
+            jTablePresence.getColumnModel().getColumn(5).setMaxWidth(200);
+            jTablePresence.getColumnModel().getColumn(6).setMaxWidth(200);
+        }
 
         javax.swing.GroupLayout jPanelPresenceLayout = new javax.swing.GroupLayout(jPanelPresence);
         jPanelPresence.setLayout(jPanelPresenceLayout);
         jPanelPresenceLayout.setHorizontalGroup(
             jPanelPresenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1825, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
             .addGroup(jPanelPresenceLayout.createSequentialGroup()
                 .addComponent(jPanelTitlesPresence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -752,7 +815,7 @@ public class Pageprincipale extends javax.swing.JFrame {
             .addGroup(jPanelPresenceLayout.createSequentialGroup()
                 .addComponent(jPanelTitlesPresence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanelPresence, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1730, 830));
@@ -762,21 +825,61 @@ public class Pageprincipale extends javax.swing.JFrame {
 
         jPanelBarreTitresAuto.setBackground(new java.awt.Color(255, 51, 0));
         jPanelBarreTitresAuto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanelAuto.add(jPanelBarreTitresAuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1750, 80));
+
+        jCheckBoxLecture.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jCheckBoxLecture.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBoxLecture.setText("Lecture");
+        jCheckBoxLecture.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jCheckBoxLecture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxLectureActionPerformed(evt);
+            }
+        });
+        jPanelBarreTitresAuto.add(jCheckBoxLecture, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 40, -1, -1));
+
+        jCheckBoxEcriture.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jCheckBoxEcriture.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBoxEcriture.setText("Ecriture");
+        jCheckBoxEcriture.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jCheckBoxEcriture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxEcritureActionPerformed(evt);
+            }
+        });
+        jPanelBarreTitresAuto.add(jCheckBoxEcriture, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 40, -1, -1));
+
+        modifierAuto.setText("Modifier");
+        modifierAuto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifierAutoActionPerformed(evt);
+            }
+        });
+        jPanelBarreTitresAuto.add(modifierAuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 40, -1, -1));
+
+        jButtonActual.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
+        jButtonActual.setText("Actualiser");
+        jButtonActual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualActionPerformed(evt);
+            }
+        });
+        jPanelBarreTitresAuto.add(jButtonActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 40, -1, -1));
+
+        jPanelAuto.add(jPanelBarreTitresAuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 2000, 80));
 
         jTableAuto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "N°", "Nom", "Prenom", "Telephone", "Autorisation1", "Autorisation2", "Autorisation3", "Autorisation4", "Autorisation5"
+                "Nom", "Prenom", "Telephone", "Email", "Lecture", "Ecriture", "ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -787,9 +890,14 @@ public class Pageprincipale extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableAuto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableAutoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableAuto);
 
-        jPanelAuto.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1750, 680));
+        jPanelAuto.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1940, 730));
 
         getContentPane().add(jPanelAuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1730, 840));
 
@@ -921,16 +1029,18 @@ public class Pageprincipale extends javax.swing.JFrame {
 
     private void jLabelValideMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelValideMouseClicked
         // bouton
-        jPanelPrincipale.setVisible(false);
-        jPanelValidation.setVisible(true);
-        barreDeTitre();
+//        jPanelPrincipale.setVisible(false);
+//        jPanelValidation.setVisible(true);
+//        barreDeTitre();
+        JOptionPane.showMessageDialog(null, "Cette page n'est pas disponible pour le moment!");
     }//GEN-LAST:event_jLabelValideMouseClicked
 
     private void jLabelAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelAdminMouseClicked
         // bouton admin
-        jPanelPrincipale.setVisible(false);
-        jPanelAdmin.setVisible(true);
-        barreDeTitre();
+//        jPanelPrincipale.setVisible(false);
+//        jPanelAdmin.setVisible(true);
+//        barreDeTitre();
+        JOptionPane.showMessageDialog(null, "Cette page n'est pas disponible pour le moment!");
     }//GEN-LAST:event_jLabelAdminMouseClicked
 
     private void jTextFieldMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMenuActionPerformed
@@ -980,14 +1090,22 @@ boolean pageOuverte = false;
         // TODO add your handling code here:
         cle = false;
         if( pageOuverte == false){
-            //page Add
-        
-            new AddUser().setVisible(true);
+            try {
+                //page Add
+
+                new AddUser().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+            }
             pageOuverte = true;
        
         }
         else{
-            new AddUser().setVisible(false);
+            try {
+                new AddUser().setVisible(false);
+            } catch (SQLException ex) {
+                Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+            }
             pageOuverte = false;
             
         }
@@ -995,21 +1113,183 @@ boolean pageOuverte = false;
         
     }//GEN-LAST:event_btnAddUserMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void btn_modif_enrgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_modif_enrgMouseClicked
         // TODO add your handling code herecle
         
         cle = true;
-        new AddUser().setVisible(true);
+        try {
+            new AddUser().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_btn_modif_enrgMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_modif_enrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modif_enrgActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_modif_enrgActionPerformed
 
     private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAddUserActionPerformed
+
+    private void jButtonActualiserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualiserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonActualiserActionPerformed
+
+    private void jTextFieldPresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPresKeyReleased
+        // barre de recherche accueil:
+        DefaultTableModel obj10 = (DefaultTableModel) jTablePresence.getModel();
+        obj10.setRowCount(0);
+        try {
+            afficherPresenceInJtable();
+        } catch (SQLException ex) {
+            Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        //obj10.setRowCount(0);
+
+        DefaultTableModel obj = (DefaultTableModel) jTablePresence.getModel();
+        TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
+        jTablePresence.setRowSorter(obj1);
+        obj1.setRowFilter(RowFilter.regexFilter(jTextFieldPres.getText()));
+    }//GEN-LAST:event_jTextFieldPresKeyReleased
+
+    private void jTextFieldEnrgKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldEnrgKeyReleased
+         // barre de recherche Enreg:
+        DefaultTableModel obj10 = (DefaultTableModel) jTableEnreg.getModel();
+        obj10.setRowCount(0);
+        try {
+            afficherEmployerInJtable();
+        } catch (SQLException ex) {
+            Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        //obj10.setRowCount(0);
+
+        DefaultTableModel obj = (DefaultTableModel) jTableEnreg.getModel();
+        TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
+        jTableEnreg.setRowSorter(obj1);
+        obj1.setRowFilter(RowFilter.regexFilter(jTextFieldEnrg.getText()));
+    }//GEN-LAST:event_jTextFieldEnrgKeyReleased
+boolean lecture;
+boolean ecriture;
+Long iduserSelectionne;
+    private void jTableAutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAutoMouseClicked
+         // Clique sur la table autorisation
+        jCheckBoxLecture.setVisible(true);
+        jCheckBoxEcriture.setVisible(true);
+       
+        jTableAuto.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                int row = jTableAuto.getSelectedRow();
+                // obtenir la ligne séléctionnée
+               
+                if(row != -1){
+                    //vérifier si une ligne est selectionnée
+                     lecture =  (boolean) jTableAuto.getValueAt(row, 4);
+                     ecriture = (boolean) jTableAuto.getValueAt(row, 5);
+                     iduserSelectionne = (Long) jTableAuto.getValueAt(row, 6);
+                    
+                    jCheckBoxLecture.setSelected(lecture);
+                    jCheckBoxEcriture.setSelected(ecriture);
+                    
+                    
+               
+//                    JOptionPane.showMessageDialog(null, "les valeur : "+lecture+" , "+ ecriture+" , "+iduserSelectionne);
+                }
+            }
+
+        });
+    }//GEN-LAST:event_jTableAutoMouseClicked
+
+    private void jCheckBoxLectureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLectureActionPerformed
+        
+        modifierAuto.setVisible(true);
+    }//GEN-LAST:event_jCheckBoxLectureActionPerformed
+
+    private void jCheckBoxEcritureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxEcritureActionPerformed
+        
+        modifierAuto.setVisible(true);
+    }//GEN-LAST:event_jCheckBoxEcritureActionPerformed
+
+    private void modifierAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifierAutoActionPerformed
+            try {
+                // clique sur le checkbox lecture: page autorisation
+                autoriser();
+                DefaultTableModel model = (DefaultTableModel) jTableAuto.getModel();
+                model.setRowCount(0);
+            afficherAutoriInJtable();
+            } catch (SQLException ex) {
+                Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jCheckBoxLecture.setVisible(false);
+            jCheckBoxEcriture.setVisible(false);
+            modifierAuto.setVisible(false);
+    }//GEN-LAST:event_modifierAutoActionPerformed
+
+    private void jButtonActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualActionPerformed
+            try {
+                // actualiser le jTable
+                DefaultTableModel model = (DefaultTableModel) jTableAuto.getModel();
+                model.setRowCount(0);
+                afficherAutoriInJtable();
+            } catch (SQLException ex) {
+                Logger.getLogger(Pageprincipale.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }//GEN-LAST:event_jButtonActualActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      
+            String idjTextf = jTextFieldAjout_presence.getText().toString();
+            AllynecDB s = new AllynecDB();
+          Connection con = s.getConnection();
+          String query = "SELECT  iduser FROM users WHERE contact = ?";
+          
+        int idImporte ;
+        
+        try  {
+            //importer l'ID de user possedant ce contact
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, idjTextf);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            try  {
+                // verifi si le resultat est positif
+                if (resultSet.next()) {
+                    idImporte = resultSet.getInt("iduser");
+                    
+                    //JOptionPane.showMessageDialog(null," id : "+idImporte);
+                    //nsertion si le resultat est positif
+                    PreparedStatement preparedStatement1 = con.prepareStatement("INSERT INTO presence(datepresence ,userpresence,heurepresence )Values(?,?,?)");
+                    preparedStatement1.setDate(1, Methodes.dateActuelle());
+                    preparedStatement1.setInt(2, idImporte);
+                    preparedStatement1.setTime(3, Methodes.heureActuelle());
+                   
+                    preparedStatement1.executeUpdate();
+                    
+                    DefaultTableModel model = (DefaultTableModel) jTablePresence.getModel();
+                    model.setRowCount(0);
+                    afficherPresenceInJtable();
+                    
+              
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Erreur !, peut être le contact n'existe pas ou n'est pas valide");
+                }
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1051,22 +1331,22 @@ boolean pageOuverte = false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton bnt_supp_enrg;
     public javax.swing.JButton btnAddUser;
+    public javax.swing.JButton btn_desa_enrg;
+    public javax.swing.JButton btn_modif_enrg;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButtonActual;
+    private javax.swing.JButton jButtonActualPres;
+    private javax.swing.JButton jButtonActualiser;
     private javax.swing.JButton jButtonLogin;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBoxTrie;
+    public javax.swing.JCheckBox jCheckBoxEcriture;
+    public javax.swing.JCheckBox jCheckBoxLecture;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelAdmin;
     private javax.swing.JLabel jLabelArc1;
     private javax.swing.JLabel jLabelArc2;
@@ -1099,21 +1379,22 @@ boolean pageOuverte = false;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     public javax.swing.JTable jTableAuto;
     public javax.swing.JTable jTableEnreg;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable jTablePresence;
+    private javax.swing.JTextField jTextFieldAjout_presence;
+    private javax.swing.JTextField jTextFieldEnrg;
     private javax.swing.JTextField jTextFieldIdLogin;
     private javax.swing.JTextField jTextFieldMenu;
+    private javax.swing.JTextField jTextFieldPres;
     private javax.swing.JTextField jTextFieldPw;
+    public javax.swing.JButton modifierAuto;
     // End of variables declaration//GEN-END:variables
     
     //------------------------------------page enrg-----------------------------------------------------------------------------
        /// importations des des employés de la BD vers le JFrame Enrg
     
-    
-
-//    //importation des  employés de la bd vers le Jtale
+    //importation des  employés de la bd vers le Jtale
      public ArrayList<Class_Enrg> getEmployeList() throws SQLException
      {
          
@@ -1121,7 +1402,7 @@ boolean pageOuverte = false;
           Connection con = s.getConnection();
          
          ArrayList<Class_Enrg> ListeEmploye = new ArrayList<Class_Enrg>();
-         String query1 = "SELECT  nom,postnom,prenom,sexe,datenaissance,domicile,contact,email, titre ,dateAjout,iduser,situation,motif FROM users ";
+         String query1 = "SELECT  nom,postnom,prenom,sexe,datenaissance,domicile,contact,email, titre ,dateAjout,iduser,situation,motif FROM users order by nom asc";
          //String query2 = "SELECT  t1.IDproduit,t1.Categorie,t1.Forme,t1.Nom,t1.Format,t1.PrixUnitaire,t1.Quantite,t1.PrixTotal, t2.Firme  FROM produits t1 INNER JOIN fabriquants t2 ON t1.IDfirme = t2.IDfirme group by  ";
          //String query;
          
@@ -1177,4 +1458,187 @@ boolean pageOuverte = false;
           }
         
      }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+         //------------------------------------page presence-----------------------------------------------------------------------------
+       /// importations des presence de la BD vers le JFrame presence
+//     public ArrayList<Class_presence> getPresenceList() throws SQLException
+//     {
+//         
+//          AllynecDB s = new AllynecDB();
+//          Connection con = s.getConnection();
+//         
+//         ArrayList<Class_presence> ListePresence = new ArrayList<Class_presence>();
+//         String query1 = "SELECT  iduser.users,nom.users,prenom.users,sexe.users,titre.users,contact.users,datepresence,heurepresence FROM users u INNER JOIN presence  ON users.iduser = presence.userpresence";
+//         
+//   
+//         
+//         Statement st;
+//         ResultSet rs;
+//         
+//         try {
+//              st = con.createStatement();
+//              rs = st.executeQuery(query1);
+//              Class_presence listePres ;
+//              int j = 1;
+//              while(rs.next())
+//              {
+//                   
+//                  listePres = new Class_presence(j,rs.getString("nom"),rs.getString("prenom"),rs.getString("sexe"),rs.getString("titre"),rs.getString("contact"),rs.getDate("datepresence"),rs.getTime("heurepresence"),rs.getInt("iduser"));
+//                  
+//                 
+//                  ListePresence.add(listePres);
+//                  j++;
+//              }
+//              st.close();
+//              rs.close();
+//             con.close();
+//         } catch (Exception ex) {
+//             Logger.getLogger(Class_Enrg.class.getName()).log(Level.SEVERE,null,ex);
+//         }
+//         
+//        return ListePresence;
+//         
+//     }
+//     
+        public void afficherPresenceInJtable() throws SQLException
+     {
+          //ArrayList<Class_presence> list3 = getPresenceList();
+          DefaultTableModel model = (DefaultTableModel)jTablePresence.getModel();
+          AllynecDB s = new AllynecDB();
+          Connection con = s.getConnection();
+         
+          try (/*Connection conn = DriverManager.getConnection(url, user, password)*/
+             Statement stmt = con.createStatement()) {
+
+            String sql = "SELECT " +
+                         "users.iduser, users.nom, users.postnom, users.prenom, users.Sexe, " +
+                         "users.datenaissance, users.domicile, users.contact, users.email, " +
+                         "users.titre, users.situation, users.motif, users.DateAjout, " +
+                         "presence.idpresence, presence.datepresence, presence.heurepresence " +
+                         "FROM users " +
+                         "INNER JOIN presence ON users.iduser = presence.userpresence order by nom asc";
+
+            ResultSet rs = stmt.executeQuery(sql);
+           
+            while (rs.next()) {
+                
+                Object[] row = {
+                   
+                    rs.getString("nom"),
+                    rs.getString("prenom"),
+                    rs.getString("Sexe"),
+                    rs.getString("titre"),
+                    rs.getString("contact"),
+                    rs.getDate("datepresence"),
+                    rs.getTime("heurepresence"),
+                    
+                    rs.getLong("iduser"),
+                    rs.getString("postnom"),
+                    rs.getDate("datenaissance"),
+                    rs.getString("domicile"),
+                    rs.getString("email"),
+                    rs.getString("situation"),
+                    rs.getString("motif"),
+                    rs.getDate("DateAjout"),
+                    rs.getLong("idpresence"),
+                    
+                   // 
+                };
+    
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+          
+     }
+        
+        
+        
+        
+                public void afficherAutoriInJtable() throws SQLException
+     {
+          //ArrayList<Class_presence> list3 = getPresenceList();
+          DefaultTableModel model = (DefaultTableModel)jTableAuto.getModel();
+          AllynecDB s = new AllynecDB();
+          Connection con = s.getConnection();
+         
+          try (/*Connection conn = DriverManager.getConnection(url, user, password)*/
+             Statement stmt = con.createStatement()) {
+
+            String sql = "SELECT " +
+                         "users.iduser, users.nom,  users.prenom, " +
+                         " users.contact, users.email, " +
+                         
+                         "autorisation.idautorise, autorisation.lecture, autorisation.ecriture " +
+                         "FROM users " +
+                         "INNER JOIN autorisation ON users.iduser = autorisation.userautorise order by nom asc";
+
+            ResultSet rs = stmt.executeQuery(sql);
+            int i = 1;
+            while (rs.next()) {
+                Object[] row = {
+                    //rs.getInt(i),
+                    rs.getString("nom"),
+                    rs.getString("prenom"),
+                    rs.getString("contact"),
+                    rs.getString("email"),
+                    rs.getBoolean("lecture"),
+                    rs.getBoolean("ecriture"),
+                   
+                    rs.getLong("iduser"),
+                    rs.getLong("idautorise"),
+                    
+                   // 
+                };
+                i ++;
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+          
+     }
+                
+                //Clic sur la la jtable autorisation
+
+     public void autoriser( ) throws SQLException
+     {
+        AllynecDB s = new AllynecDB();
+        Connection con = s.getConnection();
+        int lectureValue = jCheckBoxLecture.isSelected() ? 1 : 0;
+        int ecritureValue = jCheckBoxEcriture.isSelected() ? 1 : 0;
+         
+          try {
+             
+             PreparedStatement pstmt = con.prepareStatement(" UPDATE  autorisation SET lecture = ? , ecriture = ? WHERE userautorise = ? ");
+             pstmt.setInt(1, lectureValue);
+             pstmt.setInt(2,ecritureValue);
+             pstmt.setLong(3, iduserSelectionne);
+             
+             int rowAffecte = pstmt.executeUpdate();
+             pstmt.close();
+             con.close();
+         } catch (SQLException e) {
+         }
+
+     }
+     
+     public int conversion(JCheckBox a){
+         if(a.isSelected()){
+             return 1;
+         }else
+             return 0;
+     }
+
 }
